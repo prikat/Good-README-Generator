@@ -10,12 +10,12 @@ inquirer
       message: "What is the name of your repository?"
     },{
         type: "input",
-        name: "description",
-        message: "Give a short description of your project"
+        name: "summary",
+        message: "Give a short summary of your project"
     },{
         type: "input",
-        name: "table",
-        message: "Table of Contents"
+        name: "description",
+        message: "What does the project do?"
     },{
         type: "input",
         name: "installation",
@@ -43,60 +43,73 @@ inquirer
         message: "List any tests that pertain to the project."
     },{
         type: "input",
-        name: "questions",
+        name: "githubUsername",
         message: "What is your Github Username?"
     }
-]).then(function(data){
-    const readMe = `
-    # Title
-    ${data.title}
-    # Description
-    ${data.description}
-    # Table of Contents
-    ${data.table}
-    # Installation
-    ${data.installation}
-    # Usage
-    ${data.usage}
-    # License
-    <img src='https://img.shields.io/badge/License-${data.license}-black' alt='badge'>
-    # Contributing
-    ${data.contributing}
-    # Tests
-    ${data.tests}
-    # Questions
-    If you have any questions, please feel free to contact me below.
-    `
+]).then(function(data) {
+  
+const readMe = 
+`# ${data.title}
+${data.summary}
+## Description
+${data.description}
+### Table of Contents
+I. Title
+II. Description
+III. Table of Contents
+IV. Installation
+V. Usage
+VI. License
+VII. Contributing
+VIII. Test(s)
+IX. Questions
+    
+## Installation
+${data.installation}
+    
+## Usage
+${data.usage}
+## License
+<img src='https://img.shields.io/badge/License-${data.license}-black' alt='badge'>
+    
+## Contributing
+${data.contributing}
+## Test(s)
+${data.tests}
+## Questions
+If you have any questions, please feel free to contact me below.
+`
+  
+    fs.writeFile("README.md", readMe, function(err) {
+  
+      if (err) {return console.log(err)};
+  
+      console.log("Success!");
+  
+    });
+const queryUrl = `https://api.github.com/users/${data.githubUsername}`;
+axios.get(queryUrl).then(function(res) {
+const user = res.data;
+const githubProfile = 
+`
+<a href='${user.html_url}'>Github Profile: ${user.login}</a>
+<img src='${user.avatar_url}' height='200px' alt='github avatar'>
+`
+fs.appendFile(`README.md`, githubProfile, function(err) {
+        if (err) {throw err};
 
-        fs.writeFile("README.md", readMe, function(err){
-            if(err){
-                return console.log(err)
-            }
-            console.log("Success")
-        });
+        console.log(`Added Github Info`);
+    });
+if (user.email !== null){
+  fs.appendFile(`README.md`, `Email: ${user.email}`, function(err) {
+    if (err) {throw err};
 
-        const queryURL = `https://api.github.com/users/${data.githubUsername}`;
-        axios.get(queryURL).then(function(res){
-            const user = res.data;
-            const githubProfile = `
-            <a href='${user.html_url}'>Github Profile: ${user.login}</a>
-            <img src='${user.avatar_url}' height='200px' alt='github avatar'>
-            `
-            fs.appendFile(`README.md`, githubProfile, function(err) {
-                if (err) {throw err};
-        
-                console.log(`Added Github Info`);
-            });
-        if (user.email !== null){
-          fs.appendFile(`README.md`, `Email: ${user.email}`, function(err) {
-            if (err) {throw err};
-        
-            console.log(`Added Github Email`);
-        })} else {
-            fs.appendFile(`README.md`, `Email: Not Provided`, function(err) {
-                if (err) {throw err};
-            });
-            console.log("No email provided.")
-        };
-        });
-        });
+    console.log(`Added Github Email`);
+})} else {
+    fs.appendFile(`README.md`, `Email: Not Provided`, function(err) {
+        if (err) {throw err};
+    });
+    console.log("No email provided.")
+};
+});
+});
