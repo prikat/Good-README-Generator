@@ -43,7 +43,60 @@ inquirer
         message: "List any tests that pertain to the project."
     },{
         type: "input",
-        name: "githubUsername",
+        name: "questions",
         message: "What is your Github Username?"
     }
-])
+]).then(function(data){
+    const readMe = `
+    # Title
+    ${data.title}
+    # Description
+    ${data.description}
+    # Table of Contents
+    ${data.table}
+    # Installation
+    ${data.installation}
+    # Usage
+    ${data.usage}
+    # License
+    <img src='https://img.shields.io/badge/License-${data.license}-black' alt='badge'>
+    # Contributing
+    ${data.contributing}
+    # Tests
+    ${data.tests}
+    # Questions
+    If you have any questions, please feel free to contact me below.
+    `
+
+        fs.writeFile("README.md", readMe, function(err){
+            if(err){
+                return console.log(err)
+            }
+            console.log("Success")
+        });
+
+        const queryURL = `https://api.github.com/users/${data.githubUsername}`;
+        axios.get(queryURL).then(function(res){
+            const user = res.data;
+            const githubProfile = `
+            <a href='${user.html_url}'>Github Profile: ${user.login}</a>
+            <img src='${user.avatar_url}' height='200px' alt='github avatar'>
+            `
+            fs.appendFile(`README.md`, githubProfile, function(err) {
+                if (err) {throw err};
+        
+                console.log(`Added Github Info`);
+            });
+        if (user.email !== null){
+          fs.appendFile(`README.md`, `Email: ${user.email}`, function(err) {
+            if (err) {throw err};
+        
+            console.log(`Added Github Email`);
+        })} else {
+            fs.appendFile(`README.md`, `Email: Not Provided`, function(err) {
+                if (err) {throw err};
+            });
+            console.log("No email provided.")
+        };
+        });
+        });
