@@ -1,7 +1,7 @@
-# sdfsdfsdfs
-sdfsdfsdfdsf
+# Good Readme Generator
+Some discription
 ## Description
-sdfsdfsdfsdfs
+Short information about your project
 ### Table of Contents
 I. Title
 II. Description
@@ -14,19 +14,20 @@ VIII. Test(s)
 IX. Questions
     
 ## Installation
-sdfsdfsdfsfsf
+
     
 ## Usage
-ssdfsfsdfsfsdf
+Functions of your project
 ## License
 <img src='https://img.shields.io/badge/License-MIT-black' alt='badge'>
     
 ## Contributing
-qweqweqwe
+Alex, Chris, Sean
 ## Test(s)
-qweqweqweqwe
+Steps of testing
 ## Questions
 If you have any questions, please feel free to contact me below.
-Email: Not Provided
+
 <a href='https://github.com/prikat'>Github Profile: prikat</a>
 <img src='https://avatars0.githubusercontent.com/u/63251294?v=4' height='200px' alt='github avatar'>
+Email: Not Provided
